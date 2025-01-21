@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mediaPlayer: MediaPlayer
     lateinit var albumCover: ImageView
     lateinit var  songName: TextView
-    //val albumName: TextView = findViewById(R.id.albumName)
     lateinit var  btnPrev: ImageButton
     lateinit var  btnPause: ImageButton
     lateinit var  btnNext: ImageButton
@@ -34,18 +33,16 @@ class MainActivity : AppCompatActivity() {
         return String.format("%02d:%02d", min, seg)
     }
 
-
     // Función para actualizar la UI con los datos de la canción actual
     fun actualizarCancion() {
+        // TODO 4: Obtener los nuevos valores y ajustar la GUI
         val cancion = canciones[cancionActual]
-        albumCover.setImageResource(cancion.portada)
-        songName.text = cancion.nombre
-        //albumName.text = cancion.album
 
         // Cambiar la canción en MediaPlayer
         mediaPlayer.reset()
         mediaPlayer = MediaPlayer.create(this, cancion.audio)
         mediaPlayer.setOnCompletionListener {
+            // TODO: ¿Qué hace esto?
                 if (cancionActual < canciones.size - 1) {
                     cancionActual++
                     actualizarCancion()
@@ -54,8 +51,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
         }
-        seekBar.max = mediaPlayer.duration
-        tiempoTotal.text = formatearTiempo(mediaPlayer.duration)
+        // TODO 5: Gestionar la SeekBar y el tiempo
 
         mediaPlayer.start()
     }
@@ -94,37 +90,22 @@ class MainActivity : AppCompatActivity() {
 
         // Botón Anterior
         btnPrev.setOnClickListener {
-            if (cancionActual > 0) {
-                cancionActual--
-                actualizarCancion()
-            } else {
-                Toast.makeText(this, "No hay canciones anteriores", Toast.LENGTH_SHORT).show()
-            }
+            // TODO 3: Gestionar el botón de atrás.
         }
 
         // Botón Pausa/Reanudar
         btnPause.setOnClickListener {
-            if (mediaPlayer.isPlaying) {
-                mediaPlayer.pause()
-                Toast.makeText(this, "Reproducción pausada", Toast.LENGTH_SHORT).show()
-            } else {
-                mediaPlayer.start()
-                Toast.makeText(this, "Reproducción reanudada", Toast.LENGTH_SHORT).show()
-            }
+            // TODO 1: Si la música está sonando, pausarla. Si no, reaundarla (start())
         }
 
         // Botón Siguiente
         btnNext.setOnClickListener {
-            if (cancionActual < canciones.size - 1) {
-                cancionActual++
-                actualizarCancion()
-            } else {
-                Toast.makeText(this, "No hay más canciones", Toast.LENGTH_SHORT).show()
-            }
+            // TODO 2: Gestionar el botón de siguiente canción.
         }
 
         // Botón Bucle
         btnLoop.setOnClickListener {
+            // Esta os la doy hecha ;)
             mediaPlayer.isLooping = !mediaPlayer.isLooping
             Toast.makeText(
                 this,
@@ -133,12 +114,13 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
 
-        // Listener del SeekBar para cambiar el progreso manualmente
+        // Listener del SeekBar para cambiar el progreso de la canción
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    mediaPlayer.seekTo(progress)
-                    tiempoLlevamos.text = formatearTiempo(progress)
+                    // TODO 7: Si el usuario ha modificado el seekbar...
+
+                    // TODO 7:...habrá que coger la posición del seekbar, y mover el audio allá.
                 }
             }
 
@@ -162,8 +144,9 @@ class MainActivity : AppCompatActivity() {
     private fun gestionarBarra() {
         handler.post(object : Runnable {
             override fun run() {
-                    seekBar.progress = mediaPlayer.currentPosition
-                    tiempoLlevamos.text = formatearTiempo(mediaPlayer.currentPosition)
+                    // TODO 6: Este hilo se lanza cada segundo...
+
+                    // TODO 6: ... Y tiene que gestionar la posición del seekBar.
                     handler.postDelayed(this, 1000) // Actualiza cada segundo
                 }
         })
